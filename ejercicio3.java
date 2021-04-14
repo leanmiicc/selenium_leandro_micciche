@@ -17,5 +17,7 @@ public class ejercicio3 {
         resultado = num * 2;
         return resultado;
     }
+	
+	
 
 }
