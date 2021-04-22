@@ -1,5 +1,4 @@
 package SegundaClase;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,11 +6,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-
 import java.util.List;
 
 public class registrationFacebookTest {
+    static String url = "https://www.facebook.com/";
     static String name = "John";
     static String lastName = "Smith";
     static String emailMobile = "5555555";
@@ -20,59 +18,39 @@ public class registrationFacebookTest {
     static String month = "jun";
     static String year = "1980";
     static String[] sex = {"mujer", "hombre", "personalizado"};
+    static WebDriver driver;
+
 
     @Test
     public void fullRegistrationTest() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-
-        setURL(driver, "https://www.facebook.com/");
+        driver = new ChromeDriver();
+        driver.get(url);
         Assert.assertEquals(driver.getCurrentUrl(),"https://www.facebook.com/");
 
         driver.findElement(By.linkText("Crear cuenta nueva")).click();
 
         Thread.sleep(5000);
 
-        setName(driver, name);
-        setLastname(driver, lastName);
-        setEmailMobile(driver,emailMobile);
-        setPassword(driver, password);
-        setBirthday(driver,day,month,year);
-        setGender(driver,sex[1]);
+        driver.findElement(By.name("firstname")).sendKeys(name);
+        driver.findElement(By.name("lastname")).sendKeys(lastName);
+        driver.findElement(By.name("reg_email__")).sendKeys(emailMobile);
+        driver.findElement(By.name("reg_passwd__")).sendKeys(password);
+        setBirthday(day,month,year);
+        setGender(sex[1]);
 
         //Valido los campos:
-        validateName(driver,name);
-        validateLastName(driver,lastName);
-        validateEmailMobile(driver,emailMobile);
-        validatePassword(driver,password);
-        validateDay(driver,day);
-        validateMonth(driver,month);
-        validateYear(driver,year);
-        validateRadioButtom(driver);
+        validateName(name);
+        validateLastName(lastName);
+        validateEmailMobile(emailMobile);
+        validatePassword(password);
+        validateDay(day);
+        validateMonth(month);
+        validateYear(year);
+        validateRadioButtom();
     }
 
-
-    private static void setURL(WebDriver driver, String urlSite){
-        driver.get(urlSite);
-    }
-
-    private static void setName (WebDriver driver, String name){
-        driver.findElement(By.name("firstname")).sendKeys(name);
-    }
-
-    private static void setLastname (WebDriver driver, String lastname){
-        driver.findElement(By.name("lastname")).sendKeys(lastname);
-    }
-
-    private static void setEmailMobile (WebDriver driver, String emailMobile){
-        driver.findElement(By.name("reg_email__")).sendKeys(emailMobile);
-    }
-
-    private static void setPassword (WebDriver driver, String password){
-        driver.findElement(By.name("reg_passwd__")).sendKeys(password);
-    }
-
-    private static void setBirthday (WebDriver driver, String parameterDay, String parameterMonth, String parameterYear){
+    private static void setBirthday (String parameterDay, String parameterMonth, String parameterYear){
         WebElement dayElement = driver.findElement(By.name("birthday_day"));
         WebElement monthElement = driver.findElement(By.name("birthday_month"));
         WebElement yearElement = driver.findElement(By.name("birthday_year"));
@@ -87,7 +65,7 @@ public class registrationFacebookTest {
         yearSelect.selectByValue(parameterYear);
     }
 
-    private static void setGender (WebDriver driver, String genero){
+    private static void setGender (String genero){
         List<WebElement> radioButtonsSex = driver.findElements(By.name("sex"));
         Assert.assertEquals(radioButtonsSex.size(),3);
         int gender = 0;
@@ -112,31 +90,31 @@ public class registrationFacebookTest {
 
     }
 
-    private static void validateName (WebDriver driver, String name){
+    private static void validateName (String name){
         WebElement nombre = driver.findElement(By.name("firstname"));
         Assert.assertEquals(nombre.getAttribute("value").equals(name),true);
         System.out.println("Se completo correctamente el campo Nombre.");
     }
 
-    private static void validateLastName (WebDriver driver, String lastName){
+    private static void validateLastName (String lastName){
         WebElement apellido = driver.findElement(By.name("lastname"));
         Assert.assertEquals(apellido.getAttribute("value").equals(lastName),true);
         System.out.println("Se completo correctamente el campo Apellido.");
     }
 
-    private static void validateEmailMobile (WebDriver driver, String emailMobile){
+    private static void validateEmailMobile (String emailMobile){
         WebElement emailMovil = driver.findElement(By.name("reg_email__"));
         Assert.assertEquals(emailMovil.getAttribute("value").equals(emailMobile),true);
         System.out.println("Se completo correctamente el campo Email o Movil.");
     }
 
-    private static void validatePassword (WebDriver driver, String password){
+    private static void validatePassword (String password){
         WebElement contraseña = driver.findElement(By.name("reg_passwd__"));
         Assert.assertEquals(contraseña.getAttribute("value").equals(password),true);
         System.out.println("Se completo correctamente el campo Password.");
     }
 
-    private static void validateDay (WebDriver driver, String day){
+    private static void validateDay (String day){
         WebElement dayElement = driver.findElement(By.name("birthday_day"));
         Select dayOption = new Select(dayElement);
         String option = dayOption.getFirstSelectedOption().getText();
@@ -144,7 +122,7 @@ public class registrationFacebookTest {
         System.out.println("Se completo correctamente el Menu Dia.");
     }
 
-    private static void validateMonth (WebDriver driver, String month){
+    private static void validateMonth (String month){
         WebElement monthElement = driver.findElement(By.name("birthday_month"));
         Select monthOption = new Select(monthElement);
         String option = monthOption.getFirstSelectedOption().getText();
@@ -152,14 +130,14 @@ public class registrationFacebookTest {
         System.out.println("Se completo correctamente el Menu Mes.");
     }
 
-    private static void validateYear (WebDriver driver, String year){
+    private static void validateYear (String year){
         WebElement yearElement = driver.findElement(By.name("birthday_year"));
         Select yearOption = new Select(yearElement);
         String option = yearOption.getFirstSelectedOption().getText();
         Assert.assertEquals(year,option);
         System.out.println("Se completo correctamente el Menu Año.");
     }
-    private static void validateRadioButtom (WebDriver driver) {
+    private static void validateRadioButtom () {
         List<WebElement> sexRadioButton = driver.findElements(By.name("sex"));
         Assert.assertEquals(sexRadioButton.isEmpty(), false);
         System.out.println("Se completo correctamente la opcion del sexo.");
