@@ -34,9 +34,8 @@ public class SpotifyWithCssSelectorTest {
         driver.findElement(By.cssSelector("input[placeholder='AAAA']")).sendKeys(year);
         //Clickeo el genero:
         List<WebElement> listGenero = driver.findElements(By.cssSelector("span.Indicator-sc-16vj7o8-0.iBjMfh"));
-        for(int i = 0; i < listGenero.size();i++){
-            listGenero.get(0).click();
-        }
+        listGenero.get(0).click();
+
         // Clickeo los check de Prefiero no recibir publicidad de Spotify y
         // Compartir mis datos de registro con los proveedores de contenido de Spotify para fines de marketing:
 
